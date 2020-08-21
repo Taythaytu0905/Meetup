@@ -1,7 +1,7 @@
-import state from './userUpStates'
-import mutations from './userMutations'
-import getters from './userUpGetters'
-import actions from './userActions'
+import state from './states'
+import mutations from './mutations'
+import getters from './getters'
+import actions from './actions'
 
 export default {
   state,

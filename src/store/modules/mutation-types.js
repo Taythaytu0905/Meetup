@@ -1,1 +1,5 @@
 export const CREATE_MEETUP = 'createMeetup'
+export const SET_USER = 'setUser'
+export const SET_LOADING = 'setLoading'
+export const SET_ERROR = 'setError'
+export const CLEAR_ERROR = 'clearError'
