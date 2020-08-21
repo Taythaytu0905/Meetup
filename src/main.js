@@ -22,13 +22,14 @@ new Vue({
   render: h => h(App),
   created () {
     firebase.initializeApp({
-      apiKey: process.env.API_KEY,
-      authDomain: process.env.AUTH_DOMAIN,
-      databaseURL: process.env.DB_ULR,
-      projectId: process.env.PR_ID,
-      storageBucket: process.env.STORAGE_BUCKET,
-      messagingSenderId: process.env.M_SENDERID,
-      appId: process.env.APP_ID
+      apiKey: 'AIzaSyD1yPyWylhKiWMS-dl9IOxJWrat3rhiW04',
+      authDomain: 'meetup-app-98d64.firebaseapp.com',
+      databaseURL: 'https://meetup-app-98d64.firebaseio.com',
+      projectId: 'meetup-app-98d64',
+      storageBucket: 'meetup-app-98d64.appspot.com',
+      messagingSenderId: '578420368205',
+      appId: '1:578420368205:web:012441449fc099822f0d04'
     })
+    this.$store.dispatch('loadMeetups')
   }
 }).$mount('#app')

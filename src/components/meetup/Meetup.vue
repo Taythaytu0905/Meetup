@@ -40,7 +40,7 @@ export default {
     }
   },
   created () {
-    this.meetup = cloneDeep(this.loadedMeetup(Number(this.id)))
+    this.meetup = cloneDeep(this.loadedMeetup(this.id))
   },
   computed: {
     ...mapGetters(['loadedMeetup'])
