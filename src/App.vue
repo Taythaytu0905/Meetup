@@ -19,6 +19,5 @@ export default {
     Footer,
     Header
   }
-
 }
 </script>
