@@ -1,7 +1,7 @@
-import state from './meetUpStates'
-import mutations from './meetUpMutations'
-import getters from './meetUpGetters'
-import actions from './meetUpActions'
+import state from './states'
+import mutations from './mutations'
+import getters from './getters'
+import actions from './actions'
 
 export default {
   state,

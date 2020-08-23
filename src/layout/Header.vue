@@ -42,15 +42,28 @@ export default {
   },
 
   data: () => ({
-    drawer: false,
-    menuItems: [
-      { icon: 'account-group', title: 'View Meetups', link: '/meetups' },
-      { icon: 'settings', title: 'Organize Meetup', link: '/meetup/new' },
-      { icon: 'account', title: 'Profile', link: '/profile' },
-      { icon: 'face', title: 'Sign up', link: '/signup' },
-      { icon: 'lock', title: 'Sign in', link: '/signin' }
-    ]
-  })
+    drawer: false
+  }),
+  computed: {
+    menuItems () {
+      let menuItems = [
+        { icon: 'face', title: 'Sign up', link: '/signup' },
+        { icon: 'lock', title: 'Sign in', link: '/signin' }
+      ]
+      if (this.userIsAuthenticated) {
+        menuItems = [
+          { icon: 'account-group', title: 'View Meetups', link: '/meetups' },
+          { icon: 'settings', title: 'Organize Meetup', link: '/meetup/new' },
+          { icon: 'account', title: 'Profile', link: '/profile' }
+        ]
+      }
+      return menuItems
+    },
+    userIsAuthenticated () {
+      const user = this.$store.getters.user
+      return user !== null && user !== undefined
+    }
+  }
 }
 </script>
 

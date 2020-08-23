@@ -1,64 +1,56 @@
 <template>
    <v-app id="inspire">
     <v-main>
-      <v-container
-        class="fill-height"
-        fluid
-      >
-        <v-row
-          align="center"
-          justify="center"
-        >
-          <v-col
-            cols="12"
-            sm="8"
-            md="4"
-          >
-            <v-card class="elevation-12">
-              <v-toolbar
-                color="primary"
-                dark
-                flat
-              >
-                <v-toolbar-title>Login form</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      :href="source"
-                      icon
-                      large
-                      target="_blank"
-                      v-on="on"
-                    >
-                      <v-icon>mdi-code-tags</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Source</span>
-                </v-tooltip>
-              </v-toolbar>
+      <v-container>
+        <v-row v-if="error">
+          <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
+            <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
+            <v-card>
               <v-card-text>
-                <v-form>
-                  <v-text-field
-                    label="Login"
-                    name="login"
-                    prepend-icon="mdi-account"
-                    type="text"
-                  ></v-text-field>
-
-                  <v-text-field
-                    id="password"
-                    label="Password"
-                    name="password"
-                    prepend-icon="mdi-lock"
-                    type="password"
-                  ></v-text-field>
-                </v-form>
+                <v-container>
+                  <v-form @submit.prevent="onSignin">
+                    <v-row>
+                      <v-col xs="12">
+                        <v-text-field
+                          label="Email"
+                          name="email"
+                          v-model="email"
+                          prepend-icon="mdi-account"
+                          type="email"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col xs="12">
+                        <v-text-field
+                          id="password"
+                          label="Password"
+                          name="password"
+                          v-model="password"
+                          prepend-icon="mdi-lock"
+                          type="password"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col xs="12">
+                        <v-btn
+                        type="submit"
+                        @click="loader = 'loading'"
+                        :loading="loading"
+                        :disabled="loading"
+                        >Sign in</v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-form>
+                </v-container>
               </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="primary">Login</v-btn>
-              </v-card-actions>
             </v-card>
           </v-col>
         </v-row>
@@ -69,7 +61,39 @@
 
 <script>
 export default {
-  name: 'Signin'
+  name: 'Signin',
+  data () {
+    return {
+      email: '',
+      password: ''
+    }
+  },
+  computed: {
+    user () {
+      return this.$store.getters.user
+    },
+    loading () {
+      return this.$store.getters.loading
+    },
+    error () {
+      return this.$store.getters.error
+    }
+  },
+  watch: {
+    user (value) {
+      if (value !== null && value !== undefined) {
+        this.$router.push('/')
+      }
+    }
+  },
+  methods: {
+    onSignin () {
+      this.$store.dispatch('signUserIn', { email: this.email, password: this.password })
+    },
+    onDismissed () {
+      this.$store.dispatch('clearError')
+    }
+  }
 }
 </script>
 
