@@ -12,7 +12,11 @@ export default {
           const newUser = {
             id: user.uid,
             registeredMeetups: [],
-            fbKeys: {}
+            fbKeys: {},
+            name: '',
+            phone: '',
+            idProfile: '',
+            location: ''
           }
           commit(SET_USER, newUser)
         }
@@ -32,9 +36,13 @@ export default {
         user => {
           commit(SET_LOADING, false)
           const newUser = {
+            idProfile: '',
             id: user.uid,
             registeredMeetups: [],
-            fbKeys: {}
+            fbKeys: {},
+            name: '',
+            phone: '',
+            location: ''
           }
           commit(SET_USER, newUser)
         }
@@ -48,9 +56,13 @@ export default {
   },
   autoSignIn ({ commit }, payload) {
     commit(SET_USER, {
+      idProfile: '',
       id: payload.uid,
       registeredMeetups: [],
-      fbKeys: {}
+      fbKeys: {},
+      name: '',
+      phone: '',
+      location: ''
     })
   },
   logout ({ commit }) {
@@ -95,7 +107,7 @@ export default {
   },
   getDataUser ({ commit, getters }) {
     commit(SET_LOADING, true)
-    firebase.database().ref('/user/' + getters.user.id + '/registrations/').once('value')
+    firebase.database().ref('/user/' + getters.user.id + '/registration/').once('value')
       .then(data => {
         const dataRegister = data.val()
         const registeredMeetups = []
@@ -104,17 +116,91 @@ export default {
           registeredMeetups.push(dataRegister[key])
           fbKeys[dataRegister[key]] = key
         }
-        const updateData = {
-          id: getters.user.id,
-          registeredMeetups: registeredMeetups,
-          fbKeys: fbKeys
-        }
-        commit(SET_LOADING, false)
-        commit(SET_USER, updateData)
+        firebase.database().ref('/user/' + getters.user.id + '/profile/').once('value')
+          .then(data => {
+            const profile = data.val()
+            let name = ''
+            let phone = ''
+            let idProfile = ''
+            let location = ''
+            for (const key in profile) {
+              name = profile[key].name
+              phone = profile[key].phone
+              idProfile = key
+              location = profile[key].location
+            }
+            const updateData = {
+              idProfile: idProfile,
+              name: name,
+              phone: phone,
+              id: getters.user.id,
+              registeredMeetups: registeredMeetups,
+              fbKeys: fbKeys,
+              location: location
+            }
+            commit(SET_LOADING, false)
+            commit(SET_USER, updateData)
+          })
       })
       .catch(error => {
         commit(SET_ERROR, error)
         commit(SET_LOADING, true)
+      })
+  },
+  addProfileUser ({ commit, getters }, payload) {
+    commit(SET_LOADING, true)
+    const user = getters.user
+    firebase.database().ref('/user/' + user.id).child('/profile/')
+      .push(payload)
+      .then(data => {
+        const newDataUser = {
+          id: user.id,
+          registeredMeetups: user.registeredMeetups,
+          fbKeys: user.fbKeys,
+          name: payload.name,
+          phone: payload.phone,
+          location: payload.location,
+          idProfile: data.key
+        }
+        commit(SET_LOADING, false)
+        commit(SET_USER, newDataUser)
+      })
+      .catch(error => {
+        commit(SET_LOADING, false)
+        commit(SET_ERROR, error)
+      })
+  },
+  updateProfileUser ({ commit, getters }, payload) {
+    commit(SET_LOADING, true)
+    const user = getters.user
+    const updateObj = {}
+    if (payload.name) {
+      updateObj.name = payload.name
+    }
+    if (payload.phone) {
+      updateObj.phone = payload.phone
+    }
+    if (payload.location) {
+      updateObj.location = payload.location
+    }
+    firebase.database().ref('/user/' + user.id + '/profile/').child(user.idProfile)
+      .update(updateObj)
+      .then(data => {
+        commit(SET_LOADING, false)
+        const newDataUser = {
+          id: user.id,
+          registeredMeetups: user.registeredMeetups,
+          fbKeys: user.fbKeys,
+          name: payload.name,
+          phone: payload.phone,
+          location: payload.location,
+          idProfile: data.key
+        }
+        commit(SET_USER, newDataUser)
+      })
+      .catch(error => {
+        commit(SET_LOADING, false)
+        commit(SET_ERROR, error)
       })
   }
 }

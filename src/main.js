@@ -10,14 +10,16 @@ import DateFilter from './filters/date'
 import * as firebase from 'firebase'
 import AlertCmp from '../src/shared/Alert.vue'
 import RegisterDialog from '../src/components/registration/RegisterDialog.vue'
-import Edit from '../src/components/edit/Edit.vue'
+import EditMeetup from '../src/components/edit/EditMeetup.vue'
+import EditProfile from '../src/components/edit/EditProfile.vue'
 
 Vue.config.productionTip = false
 
 Vue.filter('date', DateFilter)
 Vue.component('app-alert', AlertCmp)
 Vue.component('app-register-dialog', RegisterDialog)
-Vue.component('app-edit-dialog', Edit)
+Vue.component('app-edit-dialog', EditMeetup)
+Vue.component('app-edit-profile-dialog', EditProfile)
 
 new Vue({
   router,

@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+<v-row justify="center">
     <v-btn class="mx-2" fab dark large color="grey"  @click.stop="dialog = true">
       <v-icon dark>mdi-pencil</v-icon>
     </v-btn>

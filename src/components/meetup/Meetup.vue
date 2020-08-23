@@ -32,18 +32,9 @@
 <script>
 
 import { mapGetters } from 'vuex'
-// import { cloneDeep } from 'lodash'
 
 export default {
   props: ['id'],
-  // data () {
-  //   return {
-  //     meetup: ''
-  //   }
-  // },
-  // created () {
-  //   this.meetup = cloneDeep(this.loadedMeetup(this.id))
-  // },
   computed: {
     ...mapGetters(['loadedMeetup']),
     meetup () {
