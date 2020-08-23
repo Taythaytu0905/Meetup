@@ -1,12 +1,16 @@
 <template>
     <div>
-        <p>User Page</p>
+        <p>{{profileUser.id}}</p>
     </div>
 </template>
 
 <script>
 export default {
-
+  computed: {
+    profileUser () {
+      return this.$store.getters.user
+    }
+  }
 }
 </script>
 

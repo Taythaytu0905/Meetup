@@ -1,4 +1,4 @@
-import { CREATE_MEETUP, SET_LOADED_MEETUPS, SET_LOADING, SET_ERROR, CLEAR_ERROR } from '../mutation-types'
+import { CREATE_MEETUP, SET_LOADED_MEETUPS, SET_LOADING, SET_ERROR, CLEAR_ERROR, DELETE_MEETUP, EDIT_MEETUP } from '../mutation-types'
 import * as firebase from 'firebase'
 
 export default {
@@ -37,11 +37,46 @@ export default {
       date: payload.date.toISOString(),
       creatorId: getters.user.id
     }
-    console.log(meetup)
     firebase.database().ref('meetups').push(meetup)
       .then(data => {
         const key = data.key
         commit(CREATE_MEETUP, { ...meetup, id: key })
+      })
+      .catch(error => commit(SET_ERROR, error))
+  },
+  editMeetup ({ commit }, payload) {
+    commit(SET_LOADING, true)
+    commit(CLEAR_ERROR)
+    const updateObj = {}
+    if (payload.title) {
+      updateObj.title = payload.title
+    }
+    if (payload.location) {
+      updateObj.location = payload.location
+    }
+    if (payload.description) {
+      updateObj.description = payload.description
+    }
+    if (payload.imageUrl) {
+      updateObj.imageUrl = payload.imageUrl
+    }
+    if (payload.date) {
+      updateObj.date = payload.date
+    }
+    firebase.database().ref('meetups').child(payload.id).update(updateObj)
+      .then(() => {
+        commit(SET_LOADING, false)
+        commit(EDIT_MEETUP, payload)
+      })
+      .catch(error => commit(SET_ERROR, error))
+  },
+  deleteMeetup ({ commit }, payload) {
+    commit(SET_LOADING, true)
+    commit(CLEAR_ERROR)
+    firebase.database().ref('meetups').child(payload).remove()
+      .then(() => {
+        commit(SET_LOADING, false)
+        commit(DELETE_MEETUP, payload)
       })
       .catch(error => commit(SET_ERROR, error))
   }
