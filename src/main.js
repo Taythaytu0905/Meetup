@@ -9,11 +9,15 @@ import store from './store'
 import DateFilter from './filters/date'
 import * as firebase from 'firebase'
 import AlertCmp from '../src/shared/Alert.vue'
+import RegisterDialog from '../src/components/registration/RegisterDialog.vue'
+import Edit from '../src/components/edit/Edit.vue'
 
 Vue.config.productionTip = false
 
 Vue.filter('date', DateFilter)
 Vue.component('app-alert', AlertCmp)
+Vue.component('app-register-dialog', RegisterDialog)
+Vue.component('app-edit-dialog', Edit)
 
 new Vue({
   router,
@@ -30,6 +34,12 @@ new Vue({
       messagingSenderId: '578420368205',
       appId: '1:578420368205:web:012441449fc099822f0d04'
     })
-    this.$store.dispatch('loadMeetups')
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        store.dispatch('autoSignIn', user)
+        store.dispatch('getDataUser')
+      }
+    })
+    store.dispatch('loadMeetups')
   }
 }).$mount('#app')

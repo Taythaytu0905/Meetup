@@ -5,6 +5,7 @@ import CreateMeetup from '@/components/meetup/CreateMeetup'
 import Profile from '@/components/user/Profile'
 import Signin from '@/components/user/Signin'
 import Signup from '@/components/user/Signup'
+import Auth from './auth'
 
 export const routes = [
   {
@@ -26,12 +27,14 @@ export const routes = [
   {
     path: '/meetup/new',
     name: 'CreateMeetup',
-    component: CreateMeetup
+    component: CreateMeetup,
+    beforeEnter: Auth
   },
   {
     path: '/profile',
     name: 'Profile',
-    component: Profile
+    component: Profile,
+    beforeEnter: Auth
   },
   {
     path: '/signin',

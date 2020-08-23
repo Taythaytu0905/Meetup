@@ -16,7 +16,8 @@ export default {
             description: obj[key].description,
             location: obj[key].location,
             imageUrl: obj[key].imageUrl,
-            date: obj[key].date
+            date: obj[key].date,
+            creatorId: obj[key].creatorId
           })
         }
         commit(SET_LOADED_MEETUPS, meetups)
@@ -27,14 +28,16 @@ export default {
         commit(SET_LOADING, true)
       })
   },
-  createMeetup ({ commit }, payload) {
+  createMeetup ({ commit, getters }, payload) {
     const meetup = {
       title: payload.title,
       location: payload.location,
       imageUrl: payload.imageUrl,
       description: payload.description,
-      date: payload.date.toISOString()
+      date: payload.date.toISOString(),
+      creatorId: getters.user.id
     }
+    console.log(meetup)
     firebase.database().ref('meetups').push(meetup)
       .then(data => {
         const key = data.key
