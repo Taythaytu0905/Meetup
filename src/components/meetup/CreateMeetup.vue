@@ -2,7 +2,7 @@
     <v-container>
         <v-row>
             <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1" class="text-center">
-                <h4>Create a new meetup</h4>
+                <h1 class="red--text">Create A New Meetup</h1>
             </v-col>
         </v-row>
         <v-row>
@@ -67,18 +67,16 @@
                         </v-col>
                     </v-row>
                     <v-row>
-                        <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
-                            <v-date-picker v-model="date" color="green lighten-1" header-color="primary"></v-date-picker>
+                        <v-col cols="12" sm="6" md="6" xl="6" class="text-center">
+                            <v-date-picker v-model="date" color="indigo" header-color="indigo"></v-date-picker>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="6" xl="6" class="text-center">
+                            <v-time-picker v-model="time" format="24h" color="indigo" header-color="indigo"></v-time-picker>
                         </v-col>
                     </v-row>
-                    <v-row>
-                        <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
-                            <v-time-picker v-model="time" format="24h"></v-time-picker>
-                        </v-col>
-                    </v-row>
-                     <v-row>
-                        <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
-                            <v-btn class="primary" :disabled="!formIsValid" type="submit">Create Meetup</v-btn>
+                     <v-row class="mt-5">
+                        <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1" class="text-center">
+                            <v-btn class="indigo white--text" large :disabled="!formIsValid" type="submit">Create Meetup</v-btn>
                         </v-col>
                     </v-row>
                 </form>

@@ -10,14 +10,12 @@
                                     <v-img :src='meetUp.imageUrl' height="130px"></v-img>
                                 </v-col>
                                  <v-col xs="7" sm="8" md="9">
-                                    <v-card-title primary-title>
-                                        <div>
-                                            <h4 class="white--text mb-0">{{meetUp.title}}</h4>
-                                            <div>{{meetUp.date | date }}</div>
-                                        </div>
+                                    <v-card-title>
+                                            <h3 class="mb-0">{{meetUp.title}}</h3>
                                     </v-card-title>
+                                    <v-card-subtitle class="pb-0">{{meetUp.date | date }} - {{meetUp.location}}</v-card-subtitle>
                                     <v-card-actions>
-                                        <v-btn flat :to="'/meetups/' + meetUp.id">
+                                        <v-btn flat :to="'/meetups/' + meetUp.id" class="text-decoration-none">
                                             <v-icon left >mdi-calendar</v-icon>
                                             View Meetup
                                         </v-btn>
