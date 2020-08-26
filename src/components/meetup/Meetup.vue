@@ -7,6 +7,8 @@
                     <v-card>
                         <v-card-title>
                             <h6 class="primary--text">{{meetup.title}}</h6>
+                            <v-spacer></v-spacer>
+                            <app-edit-dialog v-if="userIsCreator" :meetup="meetup"></app-edit-dialog>
                         </v-card-title>
                         <v-img
                         :src="meetup.imageUrl"
@@ -30,20 +32,33 @@
 <script>
 
 import { mapGetters } from 'vuex'
-import { cloneDeep } from 'lodash'
+// import { cloneDeep } from 'lodash'
 
 export default {
   props: ['id'],
-  data () {
-    return {
-      meetup: ''
-    }
-  },
-  created () {
-    this.meetup = cloneDeep(this.loadedMeetup(this.id))
-  },
+  // data () {
+  //   return {
+  //     meetup: ''
+  //   }
+  // },
+  // created () {
+  //   this.meetup = cloneDeep(this.loadedMeetup(this.id))
+  // },
   computed: {
-    ...mapGetters(['loadedMeetup'])
+    ...mapGetters(['loadedMeetup']),
+    meetup () {
+      return this.loadedMeetup(this.id)
+    },
+    userIsAuthenticated () {
+      return this.$store.getters.user !== null &&
+      this.$store.getters.user !== undefined
+    },
+    userIsCreator () {
+      if (!this.userIsAuthenticated) {
+        return false
+      }
+      return this.$store.getters.user.id === this.meetup.creatorId
+    }
   }
 }
 </script>

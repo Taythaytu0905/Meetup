@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.UNREGISTER_MEETUP = exports.REGISTER_MEETUP = exports.SET_LOADED_MEETUPS = exports.CLEAR_ERROR = exports.SET_ERROR = exports.SET_LOADING = exports.SET_USER = exports.CREATE_MEETUP = void 0;
+exports.DELETE_MEETUP = exports.EDIT_MEETUP = exports.UNREGISTER_MEETUP = exports.REGISTER_MEETUP = exports.SET_LOADED_MEETUPS = exports.CLEAR_ERROR = exports.SET_ERROR = exports.SET_LOADING = exports.SET_USER = exports.CREATE_MEETUP = void 0;
 var CREATE_MEETUP = 'createMeetup';
 exports.CREATE_MEETUP = CREATE_MEETUP;
 var SET_USER = 'setUser';
@@ -20,3 +20,7 @@ var REGISTER_MEETUP = 'registeruserForMeetup';
 exports.REGISTER_MEETUP = REGISTER_MEETUP;
 var UNREGISTER_MEETUP = 'unregisterUserFromMeetup';
 exports.UNREGISTER_MEETUP = UNREGISTER_MEETUP;
+var EDIT_MEETUP = 'editMeetup';
+exports.EDIT_MEETUP = EDIT_MEETUP;
+var DELETE_MEETUP = 'deleteMeetup';
+exports.DELETE_MEETUP = DELETE_MEETUP;
