@@ -1,9 +1,10 @@
 <template>
     <v-dialog v-model="registerDialog" max-width="400">
-          <template v-slot:activator="{ on, attrs }">
+      <template v-slot:activator="{ on, attrs }">
         <v-btn
-          color="red lighten-2"
+          color="indigo"
           dark
+          large
           v-bind="attrs"
           v-on="on"
         >
@@ -11,28 +12,16 @@
         </v-btn>
       </template>
         <v-card>
-            <v-container>
-                <v-row>
-                    <v-col>
-                        <v-card-title v-if="userIsRegistered">Unregister from Meetup?</v-card-title>
-                        <v-card-title v-else>Register for Meetup?</v-card-title>
-                    </v-col>
-                </v-row>
-                <v-divider></v-divider>
-                <v-row>
-                    <v-col>
-                        <v-card-text>You can always change your decision later on.</v-card-text>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <v-card-action>
-                            <v-btn @click="registerDialog =false">Cancel</v-btn>
-                            <v-btn @click="onAgree">Confirm</v-btn>
-                        </v-card-action>
-                    </v-col>
-                </v-row>
-            </v-container>
+          <v-card-title class="headline grey lighten-2" v-if="userIsRegistered">Unregister from Meetup?</v-card-title>
+          <v-card-title class="headline grey lighten-2" v-else>Register for Meetup?</v-card-title>
+          <v-card-text class="pt-6">You can always change your decision later on.</v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn  @click="registerDialog =false">Cancel</v-btn>
+            <v-btn @click="onAgree">Confirm</v-btn>
+          </v-card-actions>
+
         </v-card>
     </v-dialog>
 </template>

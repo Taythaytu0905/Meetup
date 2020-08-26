@@ -186,17 +186,17 @@ export default {
     firebase.database().ref('/user/' + user.id + '/profile/').child(user.idProfile)
       .update(updateObj)
       .then(data => {
-        commit(SET_LOADING, false)
-        const newDataUser = {
+        const updateUser = {
           id: user.id,
           registeredMeetups: user.registeredMeetups,
           fbKeys: user.fbKeys,
           name: payload.name,
           phone: payload.phone,
           location: payload.location,
-          idProfile: data.key
+          idProfile: user.idProfile
         }
-        commit(SET_USER, newDataUser)
+        commit(SET_LOADING, false)
+        commit(SET_USER, updateUser)
       })
       .catch(error => {
         commit(SET_LOADING, false)

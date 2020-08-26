@@ -195,17 +195,17 @@ var _default = {
     }
 
     firebase.database().ref('/user/' + user.id + '/profile/').child(user.idProfile).update(updateObj).then(function (data) {
-      commit(_mutationTypes.SET_LOADING, false);
-      var newDataUser = {
+      var updateUser = {
         id: user.id,
         registeredMeetups: user.registeredMeetups,
         fbKeys: user.fbKeys,
         name: payload.name,
         phone: payload.phone,
         location: payload.location,
-        idProfile: data.key
+        idProfile: user.idProfile
       };
-      commit(_mutationTypes.SET_USER, newDataUser);
+      commit(_mutationTypes.SET_LOADING, false);
+      commit(_mutationTypes.SET_USER, updateUser);
     }).catch(function (error) {
       commit(_mutationTypes.SET_LOADING, false);
       commit(_mutationTypes.SET_ERROR, error);

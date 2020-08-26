@@ -1,8 +1,16 @@
 <template>
 <v-container>
-    <v-row>
-        <v-col>
-            <v-list two-line>
+  <v-row>
+    <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
+      <v-card>
+        <v-card-title>
+          <h2 class="red--text">My profile</h2>
+            <v-spacer></v-spacer>
+          <app-edit-profile-dialog :data="profileUser"></app-edit-profile-dialog>
+        </v-card-title>
+    </v-card>
+    <v-card-text>
+        <v-list two-line>
             <v-list-item >
                 <v-list-item-icon>
                 <v-icon color="indigo">mdi-account</v-icon>
@@ -36,53 +44,91 @@
                 </v-list-item-content>
             </v-list-item>
             </v-list>
-        </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <app-edit-profile-dialog></app-edit-profile-dialog>
+    </v-card-text>
+    </v-col>
+  </v-row>
+
+  <v-row>
+      <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
+        <h2 class="red--text text-center">Created Meetup</h2>
+      </v-col>
+  </v-row>
+  <v-row v-for="meetUp in meetUpsCreate" :key="meetUp.id">
+    <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
+      <v-card class="indigo lighten-4">
+        <v-container>
+          <v-row>
+            <v-col xs="5" sm="4" md="3">
+              <v-img :src='meetUp.imageUrl' height="130px"></v-img>
+            </v-col>
+            <v-col xs="7" sm="8" md="9">
+              <v-card-title>
+                <h3 class="mb-0">{{meetUp.title}}</h3>
+              </v-card-title>
+              <v-card-subtitle class="pb-0">{{meetUp.date | date }} - {{meetUp.location}}</v-card-subtitle>
+                  <v-card-actions>
+                    <v-btn flat :to="'/meetups/' + meetUp.id" class="text-decoration-none">
+                      <v-icon left >mdi-calendar</v-icon>
+                      View Meetup
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn @click="deleteMeetup(meetUp.id)">
+                      <v-icon left >mdi-delete</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
       </v-col>
     </v-row>
+
+  <v-row>
+      <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
+        <h2 class="red--text text-center">Registered</h2>
+      </v-col>
+  </v-row>
   <v-row v-for="meetUp in meetups" :key="meetUp.id">
-                <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
-                    <v-card class="indigo lighten-4">
-                        <v-container>
-                            <v-row>
-                                <v-col xs="5" sm="4" md="3">
-                                    <v-img :src='meetUp.imageUrl' height="130px"></v-img>
-                                </v-col>
-                                 <v-col xs="7" sm="8" md="9">
-                                    <v-card-title primary-title>
-                                        <div>
-                                            <h4 class="white--text mb-0">{{meetUp.title}}</h4>
-                                            <div>{{meetUp.date | date }}</div>
-                                        </div>
-                                    </v-card-title>
-                                    <v-card-actions>
-                                        <v-btn flat :to="'/meetups/' + meetUp.id">
-                                            <v-icon left >mdi-calendar</v-icon>
-                                            View Meetup
-                                        </v-btn>
-                                        <v-spacer>
-                                        </v-spacer>
-                                        <v-btn @click="onAgree(meetUp.id)">
-                                            <v-icon left >mdi-delete</v-icon>
-                                        </v-btn>
-                                    </v-card-actions>
-                                </v-col>
-                            </v-row>
-                        </v-container>
-                    </v-card>
-                </v-col>
+    <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
+      <v-card class="indigo lighten-4">
+        <v-container>
+          <v-row>
+            <v-col xs="5" sm="4" md="3">
+              <v-img :src='meetUp.imageUrl' height="130px"></v-img>
+            </v-col>
+            <v-col xs="7" sm="8" md="9">
+              <v-card-title>
+                <h3 class="mb-0">{{meetUp.title}}</h3>
+              </v-card-title>
+              <v-card-subtitle class="pb-0">{{meetUp.date | date }} - {{meetUp.location}}</v-card-subtitle>
+                  <v-card-actions>
+                    <v-btn flat :to="'/meetups/' + meetUp.id" class="text-decoration-none">
+                      <v-icon left >mdi-calendar</v-icon>
+                      View Meetup
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn @click="unRegiser(meetUp.id)">
+                      <v-icon left >mdi-delete</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+              </v-col>
             </v-row>
+          </v-container>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
+
+import { mapGetters } from 'vuex'
+
 export default {
   computed: {
+    ...mapGetters(['user']),
     profileUser () {
-      return this.$store.getters.user
+      return this.user
     },
     meetUps () {
       return this.$store.getters.loadedMeetups
@@ -99,11 +145,18 @@ export default {
         }
       }
       return data
+    },
+    meetUpsCreate () {
+      const data = this.meetUps.filter(meetup => meetup.creatorId === this.profileUser.id)
+      return data
     }
   },
   methods: {
-    onAgree (id) {
+    unRegiser (id) {
       this.$store.dispatch('unregisterUserFromMeetup', id)
+    },
+    deleteMeetup (id) {
+      this.$store.dispatch('deleteMeetup', id)
     }
   }
 }

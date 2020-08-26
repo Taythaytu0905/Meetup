@@ -1,111 +1,100 @@
 <template>
-<v-row justify="center">
-    <v-btn class="mx-2" fab dark large color="grey"  @click.stop="dialog = true">
+  <div>
+    <v-btn class="mx-2" fab dark color="grey"  @click.stop="dialog = true">
       <v-icon dark>mdi-pencil</v-icon>
     </v-btn>
-    <v-btn class="mx-2" fab dark large color="grey"  @click="deleteMeetup">
+    <v-btn class="mx-2" fab dark color="grey"  @click="deleteDialog = true">
       <v-icon dark>mdi-delete</v-icon>
     </v-btn>
     <v-dialog
       v-model="dialog"
+      max-width="1000"
     >
       <v-card>
-        <v-card-title class="headline">Update Meetup</v-card-title>
-        <v-row>
-            <v-col xs="12">
-                <form @submit.prevent="onCreateMeetup">
-                    <v-row>
-                        <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
-                            <v-text-field
-                            name="title"
-                            label="Title"
-                            id="title"
-                            v-model="editedTitle"
-                            required
-                            >
-                            </v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
-                            <v-text-field
-                            name="location"
-                            label="Location"
-                            id="location"
-                            v-model="editedLocation"
-                            required
-                            >
-                            </v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
-                            <v-text-field
-                            name="imageUrl"
-                            label="ImageUrl"
-                            id="imageUrl"
-                            v-model="editImageUrl"
-                            required
-                            >
-                            </v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
-                            <img :src="editImageUrl" alt="" height="150">
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
-                            <v-textarea
-                            name="description"
-                            id="description"
-                            v-model="editedDecription"
-                            counter
-                            required
-                            >
-                                <template v-slot:label>
-                                    <div>
-                                    Description
-                                    </div>
-                                </template>
-                            </v-textarea>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
-                            <v-date-picker v-model="editDate" color="green lighten-1" header-color="primary"></v-date-picker>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col xs="12" sm="10" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="1">
-                            <v-time-picker v-model="editTime" format="24h"></v-time-picker>
-                        </v-col>
-                    </v-row>
-                </form>
-            </v-col>
-        </v-row>
+        <v-card-title class="headline red--text">Update Meetup</v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  name="title"
+                  label="Title"
+                  id="title"
+                  v-model="editedTitle"
+                  required
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  name="location"
+                  label="Location"
+                  id="location"
+                  v-model="editedLocation"
+                  required
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  name="imageUrl"
+                  label="ImageUrl"
+                  id="imageUrl"
+                  v-model="editImageUrl"
+                  required
+                >
+                </v-text-field>
+               </v-col>
+              <v-col cols="12" class="text-center">
+                <img :src="editImageUrl" alt="" height="200">
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  name="description"
+                  id="description"
+                  v-model="editedDecription"
+                  label="Description"
+                  counter
+                  required
+                >
+                </v-textarea>
+              </v-col>
+              <v-col cols="12" sm="6" class="text-center">
+                <v-date-picker v-model="editDate" color="indigo" header-color="indigo"></v-date-picker>
+              </v-col>
+              <v-col cols="12" sm="6" class="text-center">
+                <v-time-picker v-model="editTime" format="24h" color="indigo" header-color="indigo"></v-time-picker>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn @click="dialog = false">Close</v-btn>
+          <v-btn @click="updateMeetup">Update</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog
+      v-model="deleteDialog"
+      width="200"
+    >
+      <v-card>
+        <v-card-title class="headline grey lighten-2 text-center">
+          Are you sure ?
+        </v-card-title>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
+            @click="deleteMeetup"
           >
-            Close
-          </v-btn>
-
-          <v-btn
-            color="green darken-1"
-            text
-            @click="updateMeetup"
-          >
-            Save
+            Delete
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-row>
+  </div>
 </template>
 
 <script>
@@ -114,6 +103,7 @@ export default {
   data () {
     return {
       dialog: false,
+      deleteDialog: false,
       editedTitle: this.meetup.title,
       editedLocation: this.meetup.location,
       editImageUrl: this.meetup.imageUrl,
