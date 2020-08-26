@@ -2,6 +2,8 @@
 
 var _interopRequireWildcard = require("/home/nguyenthanhdo/meetup-app/node_modules/@babel/runtime/helpers/interopRequireWildcard");
 
+require("core-js/modules/es.function.name");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -21,7 +23,11 @@ var _default = {
       var newUser = {
         id: user.uid,
         registeredMeetups: [],
-        fbKeys: {}
+        fbKeys: {},
+        name: '',
+        phone: '',
+        idProfile: '',
+        location: ''
       };
       commit(_mutationTypes.SET_USER, newUser);
     }).catch(function (error) {
@@ -36,9 +42,13 @@ var _default = {
     firebase.auth().signInWithEmailAndPassword(payload.email, payload.password).then(function (user) {
       commit(_mutationTypes.SET_LOADING, false);
       var newUser = {
+        idProfile: '',
         id: user.uid,
         registeredMeetups: [],
-        fbKeys: {}
+        fbKeys: {},
+        name: '',
+        phone: '',
+        location: ''
       };
       commit(_mutationTypes.SET_USER, newUser);
     }).catch(function (error) {
@@ -49,9 +59,13 @@ var _default = {
   autoSignIn: function autoSignIn(_ref3, payload) {
     var commit = _ref3.commit;
     commit(_mutationTypes.SET_USER, {
+      idProfile: '',
       id: payload.uid,
       registeredMeetups: [],
-      fbKeys: {}
+      fbKeys: {},
+      name: '',
+      phone: '',
+      location: ''
     });
   },
   logout: function logout(_ref4) {
@@ -98,7 +112,7 @@ var _default = {
     var commit = _ref7.commit,
         getters = _ref7.getters;
     commit(_mutationTypes.SET_LOADING, true);
-    firebase.database().ref('/user/' + getters.user.id + '/registrations/').once('value').then(function (data) {
+    firebase.database().ref('/user/' + getters.user.id + '/registration/').once('value').then(function (data) {
       var dataRegister = data.val();
       var registeredMeetups = [];
       var fbKeys = {};
@@ -108,16 +122,93 @@ var _default = {
         fbKeys[dataRegister[key]] = key;
       }
 
-      var updateData = {
-        id: getters.user.id,
-        registeredMeetups: registeredMeetups,
-        fbKeys: fbKeys
-      };
-      commit(_mutationTypes.SET_LOADING, false);
-      commit(_mutationTypes.SET_USER, updateData);
+      firebase.database().ref('/user/' + getters.user.id + '/profile/').once('value').then(function (data) {
+        var profile = data.val();
+        var name = '';
+        var phone = '';
+        var idProfile = '';
+        var location = '';
+
+        for (var _key in profile) {
+          name = profile[_key].name;
+          phone = profile[_key].phone;
+          idProfile = _key;
+          location = profile[_key].location;
+        }
+
+        var updateData = {
+          idProfile: idProfile,
+          name: name,
+          phone: phone,
+          id: getters.user.id,
+          registeredMeetups: registeredMeetups,
+          fbKeys: fbKeys,
+          location: location
+        };
+        commit(_mutationTypes.SET_LOADING, false);
+        commit(_mutationTypes.SET_USER, updateData);
+      });
     }).catch(function (error) {
       commit(_mutationTypes.SET_ERROR, error);
       commit(_mutationTypes.SET_LOADING, true);
+    });
+  },
+  addProfileUser: function addProfileUser(_ref8, payload) {
+    var commit = _ref8.commit,
+        getters = _ref8.getters;
+    commit(_mutationTypes.SET_LOADING, true);
+    var user = getters.user;
+    firebase.database().ref('/user/' + user.id).child('/profile/').push(payload).then(function (data) {
+      var newDataUser = {
+        id: user.id,
+        registeredMeetups: user.registeredMeetups,
+        fbKeys: user.fbKeys,
+        name: payload.name,
+        phone: payload.phone,
+        location: payload.location,
+        idProfile: data.key
+      };
+      commit(_mutationTypes.SET_LOADING, false);
+      commit(_mutationTypes.SET_USER, newDataUser);
+    }).catch(function (error) {
+      commit(_mutationTypes.SET_LOADING, false);
+      commit(_mutationTypes.SET_ERROR, error);
+    });
+  },
+  updateProfileUser: function updateProfileUser(_ref9, payload) {
+    var commit = _ref9.commit,
+        getters = _ref9.getters;
+    commit(_mutationTypes.SET_LOADING, true);
+    var user = getters.user;
+    var updateObj = {};
+
+    if (payload.name) {
+      updateObj.name = payload.name;
+    }
+
+    if (payload.phone) {
+      updateObj.phone = payload.phone;
+    }
+
+    if (payload.location) {
+      updateObj.location = payload.location;
+    }
+
+    firebase.database().ref('/user/' + user.id + '/profile/').child(user.idProfile).update(updateObj).then(function (data) {
+      commit(_mutationTypes.SET_LOADING, false);
+      var newDataUser = {
+        id: user.id,
+        registeredMeetups: user.registeredMeetups,
+        fbKeys: user.fbKeys,
+        name: payload.name,
+        phone: payload.phone,
+        location: payload.location,
+        idProfile: data.key
+      };
+      commit(_mutationTypes.SET_USER, newDataUser);
+    }).catch(function (error) {
+      commit(_mutationTypes.SET_LOADING, false);
+      commit(_mutationTypes.SET_ERROR, error);
     });
   }
 };

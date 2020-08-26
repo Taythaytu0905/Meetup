@@ -30,7 +30,9 @@ var _Alert = _interopRequireDefault(require("../src/shared/Alert.vue"));
 
 var _RegisterDialog = _interopRequireDefault(require("../src/components/registration/RegisterDialog.vue"));
 
-var _Edit = _interopRequireDefault(require("../src/components/edit/Edit.vue"));
+var _EditMeetup = _interopRequireDefault(require("../src/components/edit/EditMeetup.vue"));
+
+var _EditProfile = _interopRequireDefault(require("../src/components/edit/EditProfile.vue"));
 
 _vue.default.config.productionTip = false;
 
@@ -40,7 +42,9 @@ _vue.default.component('app-alert', _Alert.default);
 
 _vue.default.component('app-register-dialog', _RegisterDialog.default);
 
-_vue.default.component('app-edit-dialog', _Edit.default);
+_vue.default.component('app-edit-dialog', _EditMeetup.default);
+
+_vue.default.component('app-edit-profile-dialog', _EditProfile.default);
 
 new _vue.default({
   router: _router.default,
